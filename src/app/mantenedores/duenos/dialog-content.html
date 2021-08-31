@@ -1,0 +1,102 @@
+<h2 class="font-medium" mat-dialog-title><strong>{{action}}</strong></h2>
+<mat-dialog-content class="pb-3" *ngIf="action != 'Delete'; else elseTemplate">
+    <form [formGroup]="miFormulario" autocomplete="off">
+
+        <div fxLayout="row wrap" class="align-items-center">
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput autocomplete="off" id="rut" name="rut" formControlName="rut"
+                            placeholder="Rut">
+                        <mat-error>
+                            {{ "Rut ya existe o no válido" }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput autocomplete="off" id="inicial" maxlength="6" name="inicial"
+                            formControlName="inicial" placeholder="Iniciales">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput autocomplete="off" maxlength=50 id="nombre" name="nombre"
+                            formControlName="nombre" placeholder="Nombre">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="100">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput autocomplete="off" id="direccion" maxlength=100 name="direccion"
+                            formControlName="direccion" placeholder="Dirección">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="50">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput email autocomplete="off" id="email01" maxlength=60 name="email01"
+                            formControlName="email01" placeholder="Email">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="50">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput email autocomplete="off" id="email02" maxlength=60 name="email02"
+                            formControlName="email02" placeholder="Email">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="50">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput autocomplete="off" maxlength=13 id="fono01" name="fono01"
+                            formControlName="fono01" placeholder="Fono ">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="50">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput autocomplete="off" maxlength=13 id="fono02" name="fono02"
+                            formControlName="fono02" placeholder="Fono ">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="100">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput autocomplete="off" maxlength=100 id="otro" name="otro"
+                            formControlName="otro" placeholder="Otro ">
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+        <button mat-button (click)="doAction()" mat-flat-button color="warn"
+            [disabled]="!miFormulario.valid">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <p>Sure to delete <b>{{local_data.Name}}</b> ?</p>
+    <div mat-dialog-actions aling="end" class="pt-3">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </div>
+</ng-template>

@@ -1,0 +1,195 @@
+<h2 class="font-medium" mat-dialog-title><strong>{{action}}</strong></h2>
+<form [formGroup]="miFormulario" autocomplete="off">
+    <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="50%" fxFlex="100">
+            <mat-dialog-content class="pb-3" *ngIf="action != 'Delete'; else elseTemplate">
+
+                <div fxLayout="row wrap" class="align-items-center">
+                    <div fxFlex="100" fxFlex.gt-sm="100">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+
+                                <mat-select formControlName="id_inmueblefull" placeholder="Inmueble">
+                                    <mat-option *ngFor="let item of inmuebles" [value]="item">
+                                        {{item.des_corta + ' - '+ item.calle }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="45">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <input type="text" matInput id="nom_arrendatario" name="nom_arrendatario"
+                                    formControlName="nom_arrendatario" placeholder="Arrendatario">
+                                <mat-error>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="15">
+                        <div class="m-r-0 m-l-0">
+                            <a href="{{'tel:+'+ fonoarr }}" class="m-r-10 cursor-pointer">
+                                <mat-icon class="text-info">phonelink_ring</mat-icon>
+                            </a>
+                            <a href="{{'https://wa.me/'+ fonoarr }}" class="m-r-10 cursor-pointer">
+                                <mat-icon class="text-info">chat</mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="40">
+                        <div class="m-r-15 m-l-0">
+                            <mat-form-field>
+                                <mat-select formControlName="id_tipoincidente" placeholder="Tipo Incidente">
+                                    <mat-option *ngFor="let item of tipoIncidente" [value]="item.id">
+                                        {{item.v1 }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="100">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <input matInput formControlName="fecha" [matDatepicker]="picker"
+                                    placeholder="Fecha Incidente">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="100">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <textarea matInput formControlName="incidente" cdkTextareaAutosize
+                                    cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"
+                                    placeholder="Detalle Incidente"></textarea>
+
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="50">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <mat-select formControlName="id_tecnico" placeholder="Tecnico">
+                                    <mat-option *ngFor="let item of tecnicos" [value]="item.id">
+                                        {{item.nombre + ' ' + item.especialidad }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="50">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <mat-select formControlName="id_estadoincidente" placeholder="Estado del Incidente">
+                                    <mat-option *ngFor="let item of estadoIncidente" [value]="item.id">
+                                        {{item.v1 }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <button mat-button (click)="doAction()" mat-flat-button color="warn"
+                    [disabled]="!miFormulario.valid">{{action}}</button>
+                <button mat-button (click)="closeDialog()">Cancelar</button>
+            </mat-dialog-content>
+        </div>
+
+        <div fxFlex.gt-sm="50%" fxFlex="100">
+            <mat-card>
+                <mat-card-content>
+                    <mat-card-title>
+                        <h4 class="m-0">Bitacora Incidente</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle>Detalle Incidente</mat-card-subtitle>
+                    <div fxLayout="row wrap" class="align-items-center">
+
+                        <div fxFlex="100" fxFlex.gt-sm="25">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <input matInput formControlName="fecha01" [matDatepicker]="picker01"
+                                        placeholder="Fecha Obs 01">
+                                    <mat-datepicker-toggle matSuffix [for]="picker01"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker01></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="75">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <input type="text" matInput formControlName="obs01" id="obs01" name="obs01"
+                                        placeholder="Observación 01">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="25">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <input matInput formControlName="fecha02" [matDatepicker]="picker02"
+                                        placeholder="Fecha Obs 02">
+                                    <mat-datepicker-toggle matSuffix [for]="picker02"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker02></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="75">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <input type="text" matInput formControlName="obs02" id="obs02" name="obs02"
+                                        placeholder="Observación 02">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="25">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <input matInput formControlName="fecha03" [matDatepicker]="picker03"
+                                        placeholder="Fecha Obs 03">
+                                    <mat-datepicker-toggle matSuffix [for]="picker03"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker03></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="75">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <input type="text" matInput formControlName="obs03" id="obs03" name="obs03"
+                                        placeholder="Observación 03">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</form>
+
+<ng-template #elseTemplate>
+    <p>Sure to delete <b>{{local_data.Name}}</b> ?</p>
+    <div mat-dialog-actions aling="end" class="pt-3">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </div>
+</ng-template>

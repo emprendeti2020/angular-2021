@@ -3,8 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseUrl   : 'http://localhost/backbp',  
+  ldap      : 1  
 };
+
+//Ldap:  0 - autentificación LDAP
+//Ldap:  1 - autentificación via usuario password
 
 /*
  * For easier debugging in development mode, you can import the following file

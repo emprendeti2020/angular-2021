@@ -1,0 +1,84 @@
+<h2 class="font-medium" mat-dialog-title><strong>{{action}}</strong></h2>
+<mat-dialog-content class="pb-3" *ngIf="action != 'Delete'; else elseTemplate">
+    <form [formGroup]="miFormulario" autocomplete="off">
+
+        <div fxLayout="row wrap" class="align-items-center">
+            <div fxFlex="100" fxFlex.gt-md="100">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="descripcion" name="descripcion" placeholder="Descripción Rol"
+                            maxlength="100" formControlName="descripcion">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-md="100">
+                <div class="m-r-15 m-l-15">
+                    <div class="responsive-table">
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                            <!-- Checkbox Column -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null "
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                        [aria-label]="checkboxLabel()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row) || (row.position==1) "
+                                        [aria-label]="checkboxLabel(row)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="position">
+                                <th mat-header-cell *matHeaderCellDef> No. </th>
+                                <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="weight">
+                                <th mat-header-cell *matHeaderCellDef> Weight </th>
+                                <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="symbol">
+                                <th mat-header-cell *matHeaderCellDef> Symbol </th>
+                                <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                (click)="selection.toggle(row)">
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <button mat-button (click)="doAction()" mat-flat-button color="warn"
+            [disabled]="!miFormulario.valid">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <p>Sure to delete <b>{{local_data.Name}}</b> ?</p>
+    <div mat-dialog-actions aling="end" class="pt-3">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </div>
+</ng-template>

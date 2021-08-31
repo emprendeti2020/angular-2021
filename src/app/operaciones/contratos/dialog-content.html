@@ -1,0 +1,153 @@
+<h2 class="font-medium" mat-dialog-title><strong>{{action}}</strong></h2>
+<form [formGroup]="miFormulario">
+    <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="50%" fxFlex="100">
+            <mat-dialog-content class="pb-3" *ngIf="action != 'Delete'; else elseTemplate">
+
+                <div fxLayout="row wrap" class="align-items-center">
+                    <div fxFlex="100" fxFlex.gt-sm="100">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <mat-select formControlName="id_inmueble" placeholder="Inmueble">
+                                    <mat-option *ngFor="let item of inmuebles" [value]="item.id">
+                                        {{item.des_corta + ' - '+ item.calle }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="100">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <mat-select formControlName="id_arrendatario" placeholder="Arrendatario">
+                                    <mat-option *ngFor="let item of arrendatarios" [value]="item.id">
+                                        {{item.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="100">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <mat-select formControlName="id_dueno" placeholder="Dueño">
+                                    <mat-option *ngFor="let item of duenos" [value]="item.id">
+                                        {{item.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="33.3">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <input matInput autocomplete="off" [min]="minDate" [max]="maxDate"
+                                    [matDatepicker]="fecha_ini" placeholder="Fecha Inicio" formControlName="fecha_ini">
+                                <mat-datepicker-toggle matSuffix [for]="fecha_ini"></mat-datepicker-toggle>
+                                <mat-datepicker #fecha_ini></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="33.3">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <input matInput autocomplete="off" [min]="minDate" [max]="maxDate"
+                                    [matDatepicker]="fecha_fin" placeholder="Fecha Fin" formControlName="fecha_fin">
+                                <mat-datepicker-toggle matSuffix [for]="fecha_fin"></mat-datepicker-toggle>
+                                <mat-datepicker #fecha_fin></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="33.3">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <input type="text" autocomplete="off" matInput maxlength="2" formControlName="duracion"
+                                    id="duracion" name="duracion" maxlength="02" placeholder="Duración" min="1" max="72"
+                                    inputmode="numeric" pattern="[0-9]*" digitOnly>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxFlex.gt-sm="100">
+                        <div class="m-r-15 m-l-15">
+                            <mat-form-field>
+                                <textarea matInput formControlName="otro" cdkTextareaAutosize cdkAutosizeMinRows="2"
+                                    cdkAutosizeMaxRows="5" placeholder="Notas" maxlength="100">...</textarea>
+
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+                </div>
+                <button mat-button (click)="doAction()" mat-flat-button color="warn"
+                    [disabled]="!miFormulario.valid">{{action}}</button>
+                <button mat-button (click)="closeDialog()">Cancelar</button>
+            </mat-dialog-content>
+        </div>
+
+        <div fxFlex.gt-sm="50%" fxFlex="100">
+            <mat-card>
+                <mat-card-content>
+                    <mat-card-title>
+                        <h4 class="m-0">Pagos</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle>Detalle Pago</mat-card-subtitle>
+                    <div fxLayout="row wrap" class="align-items-center">
+
+                        <div fxFlex="100" fxFlex.gt-sm="100">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <span matPrefix>$ &nbsp;</span>
+                                    <input type="text" autocomplete="off" matInput placeholder="Garantía"
+                                        formControlName="garantia" maxlength="07" inputmode="numeric" pattern="[0-9]*"
+                                        digitOnly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="100">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <span matPrefix>$ &nbsp;</span>
+                                    <input type="text" autocomplete="off" matInput placeholder="Arriendo"
+                                        formControlName="arriendo" maxlength="07" inputmode="numeric" pattern="[0-9]*"
+                                        digitOnly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="100">
+                            <div class="m-r-15 m-l-15">
+                                <mat-form-field>
+                                    <mat-icon matPrefix>table_view</mat-icon>
+                                    <input type="text" autocomplete="off" matInput placeholder="Dia de Pago"
+                                        formControlName="dpago" maxlength="02" min="1" max="30" inputmode="numeric"
+                                        pattern="[0-9]*" digitOnly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</form>
+
+<ng-template #elseTemplate>
+    <p>Sure to delete <b>{{local_data.Name}}</b> ?</p>
+    <div mat-dialog-actions aling="end" class="pt-3">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </div>
+</ng-template>

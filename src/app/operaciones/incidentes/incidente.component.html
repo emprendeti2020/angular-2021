@@ -1,0 +1,130 @@
+<div fxLayout="row wrap">
+  <!-- column -->
+  <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+    <mat-card>
+      <div class="box p-20 bg-info text-center cursor-pointer">
+        <h1 class="font-light text-white m-0">{{totalCount}}</h1>
+        <h6 class="text-white m-0">Total Incidentes</h6>
+      </div>
+    </mat-card>
+  </div>
+  <!-- column -->
+  <!-- column -->
+  <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+    <mat-card>
+      <div class="box p-20 bg-warning text-center cursor-pointer" (click)="btnFiltro('Abierto')">
+        <h1 class="font-light text-white m-0">{{10}}</h1>
+        <h6 class="text-white m-0">Abiertos</h6>
+      </div>
+    </mat-card>
+  </div>
+  <!-- column -->
+  <!-- column -->
+  <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+    <mat-card>
+      <div class="box p-20 bg-success text-center cursor-pointer" (click)="btnFiltro('En Pausa')">
+        <h1 class="font-light text-white m-0">{{20}}</h1>
+        <h6 class="text-white m-0">En Pausa</h6>
+      </div>
+    </mat-card>
+  </div>
+  <!-- column -->
+  <!-- column -->
+  <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+    <mat-card>
+      <div class="box p-20 bg-danger text-center cursor-pointer" (click)="btnFiltro('Cerrado')">
+        <h1 class="font-light text-white m-0">{{30}}</h1>
+        <h6 class="text-white m-0">Cerrados</h6>
+      </div>
+    </mat-card>
+  </div>
+  <!-- column -->
+</div>
+
+
+<div fxLayout="row wrap">
+  <div fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+        <div fxLayout="row wrap" class="align-items-center">
+          <div fxFlex.gt-md="25" fxFlex.gt-lg="25" fxFlex="100">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Buscar">
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-md="75" class="text-right">
+            <button mat-raised-button class="m-r-5" (click)="openDialog('Agregar',{})" color="primary">Agregar</button>
+            <button mat-raised-button class="m-r-5" (click)="exportToExcel(1)" color="primary">Exportar <mat-icon>
+                get_app</mat-icon></button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<mat-spinner *ngIf="cargando"></mat-spinner>
+
+
+
+<div fxLayout="row wrap">
+  <div fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+        <div class="table-responsive">
+
+          <table mat-table [dataSource]="dataSource" class="table ticket-list no-wrap">
+            <ng-container matColumnDef="des_corta">
+              <th mat-header-cell *matHeaderCellDef> Inmueble </th>
+              <td mat-cell *matCellDef="let element"> {{element.des_corta}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nom_arrendatario">
+              <th mat-header-cell *matHeaderCellDef> Arrendatario </th>
+              <td mat-cell *matCellDef="let element"> {{element.nom_arrendatario}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef> Fecha Incidente </th>
+              <td mat-cell *matCellDef="let element"> {{element.fecha }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="incidente">
+              <th mat-header-cell *matHeaderCellDef> Incidente </th>
+              <td mat-cell *matCellDef="let element"> {{element.incidente}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="estadoincidente">
+              <th mat-header-cell *matHeaderCellDef> Estado </th>
+              <td mat-cell *matCellDef="let element"> {{element.estadoincidente}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipoincidente">
+              <th mat-header-cell *matHeaderCellDef> Tipo </th>
+              <td mat-cell *matCellDef="let element"> {{element.tipoincidente}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="accion">
+              <th mat-header-cell *matHeaderCellDef> Accion </th>
+              <td mat-cell *matCellDef="let element" class="action-link">
+                <a (click)="openDialog('Actualizar',element)" class="m-r-10 cursor-pointer">
+                  <mat-icon class="text-info">system_update_alt</mat-icon>
+                </a>
+                <a (click)="openDialog('Eliminar',element)" class="m-r-10 cursor-pointer">
+                  <mat-icon class="text-danger">no_accounts</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator (page)="pageChanged($event)" [length]="totalCount" [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 15, 20, 30]" showFirstLastButtons>
+          </mat-paginator>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

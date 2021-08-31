@@ -1,0 +1,155 @@
+<h2 class="font-medium" mat-dialog-title><strong>{{action}}</strong></h2>
+<mat-dialog-content class="pb-3" *ngIf="action != 'Delete'; else elseTemplate">
+    <form [formGroup]="miFormulario" autocomplete="off">
+
+        <div fxLayout="row wrap" class="align-items-center">
+            <div fxFlex="100" fxFlex.gt-sm="100">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <mat-select formControlName="id_dependencia" placeholder="Dependencia">
+                            <mat-option *ngFor="let item of inmuebles2" [value]="item.id"
+                                (onSelectionChange)="getInmuebleporId(item)">
+                                {{item.calle + ' - ' + item.numero }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <mat-select formControlName="id_tipo" placeholder="Tipo Inmueble">
+                            <mat-option *ngFor="let item of tipoInmueble" [value]="item.id">
+                                {{item.v1 }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="des_corta" name="des_corta" formControlName="des_corta"
+                            placeholder="Des. Corta" maxlength="10">
+                        <mat-error>
+                            {{ "Descripcion corta ya existe" }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="descripcion" name="descripcion" formControlName="descripcion"
+                            placeholder="Descripcion" maxlength="100">
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="calle" name="calle" formControlName="calle" placeholder="Calle"
+                            maxlength="50">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="numero" name="numero" formControlName="numero"
+                            placeholder="Numero" maxlength="10">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="comuna" name="comuna" formControlName="comuna"
+                            placeholder="Comuna" maxlength="40">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="depto" name="depto" formControlName="depto"
+                            placeholder="Departamento" maxlength="10">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="bodega" name="bodega" formControlName="bodega"
+                            placeholder="Bodega" maxlength="10">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="33.3">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="estacionamiento" name="estacionamiento"
+                            formControlName="estacionamiento" placeholder="Estacionamiento" maxlength="10">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="25">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="rol" name="rol" formControlName="rol" placeholder="Rol"
+                            maxlength="10">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="25">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="c_luz" name="c_luz" formControlName="c_luz"
+                            placeholder="Cliente Luz" maxlength="20">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="25">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="c_agua" name="c_agua" formControlName="c_agua"
+                            placeholder="Cliente Agua" maxlength="20">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex="100" fxFlex.gt-sm="25">
+                <div class="m-r-15 m-l-15">
+                    <mat-form-field>
+                        <input type="text" matInput id="c_gas" name="c_gas" formControlName="c_gas"
+                            placeholder="Cliente Gas" maxlength="20">
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+        <button mat-button (click)="doAction()" mat-flat-button color="warn"
+            [disabled]="!miFormulario.valid">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <p>Sure to delete <b>{{local_data.Name}}</b> ?</p>
+    <div mat-dialog-actions aling="end" class="pt-3">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">{{action}}</button>
+        <button mat-button (click)="closeDialog()">Cancelar</button>
+    </div>
+</ng-template>
