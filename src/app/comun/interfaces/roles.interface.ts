@@ -13,8 +13,9 @@ export interface Document {
 }
 
 export interface Rol {
-    id: string;
+    id: number;
     descripcion: string;
+    idopciones?: string;
     estado: number;
 }
 

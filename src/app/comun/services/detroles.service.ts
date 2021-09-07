@@ -43,7 +43,7 @@ export class DetRolesService {
     }
 
 
-    getDetRoles(pagina: number = 0, tampagina: number = 10, tipo: string = ''): Observable<Document> {
+    getDetRoles(pagina: number = 0, tampagina: number = 10, tipo: string = '', id_rol:number = 0): Observable<Document> {
         //Parametros
 
         //Parametros
@@ -54,6 +54,8 @@ export class DetRolesService {
             params = params.append('pageno', pagina.toString());
             params = params.append('pagesize', tampagina.toString());
         }
+        params = params.append('id_rol', id_rol);
+
         return this.http.get<DetRolResponse>(this.baseUrl + '/det_roles/read.php', { params: params })
             .pipe(
                 map(respuesta => respuesta.document)

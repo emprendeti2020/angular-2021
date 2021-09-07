@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { Rol, RolesService, RolValidatorService } from 'src/app/comun/packs/rol';
+import { DetRol, DetRolesService } from 'src/app/comun/packs/detrol';
 import { takeUntil, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
 
@@ -92,6 +93,7 @@ export class RolComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.totalCount = parseInt(respuesta.total_count);
                 this.paginator.length = this.totalCount;
                 this.dataSource = new MatTableDataSource(respuesta.records);
+
             });
 
     }
@@ -126,7 +128,7 @@ export class RolComponent implements OnInit, AfterViewInit, OnDestroy {
     // tslint:disable-next-line - Disables all
     agregarRowData(row_obj: Rol): void {
         row_obj.estado = 0;
-
+        console.log(row_obj);
         this.rolesService.getKey("descripcion", row_obj.descripcion).
             subscribe(result => {
                 if (result) {
@@ -144,7 +146,6 @@ export class RolComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // tslint:disable-next-line - Disables all
     actualizarRowData(row_obj: Rol): void {
-        row_obj.estado = 0;
         this.rolesService.update(row_obj).subscribe(result => {
             this.updateTabla();
             this.eUtil.mostrarSnackbar('Rol Actualizado');
@@ -178,7 +179,7 @@ export class RolComponent implements OnInit, AfterViewInit, OnDestroy {
         // datos = datos.map(dato=>({nombre:dato.nombre,rut:dato.rut}))
         // o incluso
         // datos = datos.map(({ nombre, rut, ubicacion }) => ({ nombre, rut, ubicacion }))
-        //el unico pero, es que tendras que escribi  let datos: any 
+        //el unico pero, es que tendras que escribi  let datos: any
 
 
     }
@@ -215,9 +216,78 @@ export class RolComponent implements OnInit, AfterViewInit, OnDestroy {
 
 export class RolDialogContent {
 
-    displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
-    dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-    selection = new SelectionModel<PeriodicElement>(true, []);
+    displayedColumns: string[] = ['select','id','padre', 'opcion', 'url'];
+    //dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+    detroles: DetRol[] = [];
+
+    dataSource = new MatTableDataSource(this.detroles);
+
+    selection = new SelectionModel<DetRol>(  true,  []);
+
+
+  ngOnInit() {
+    this.getData();
+    this.roldetalleSubscription = this.detrolesservice.detrolesSubject.subscribe(() => {
+        this.getData();
+    });
+
+    this.createForm();
+
+  }
+
+
+
+ngOnDestroy(): void {
+    this.roldetalleSubscription.unsubscribe();
+
+}
+
+  constructor(
+    private rolValidatorService: RolValidatorService,
+    private validatorService: ValidatorService,
+    private detrolesservice: DetRolesService,
+
+    public datePipe: DatePipe,
+    public dialogRef: MatDialogRef<RolDialogContent>,
+    // @Optional() is used to prevent error if no data is passed
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Rol,
+    private _formBuilder: FormBuilder) {
+
+
+
+    this.miFormulario = this.createForm();
+    this.local_data = { ...data };
+    this.action = this.local_data.action;
+
+    //Actualizo el formulario
+    this.miFormulario.patchValue(this.local_data);
+
+    //Habilitar Formularios
+    this.doActualizarForm(this.action)
+
+    if (this.local_data.DateOfJoining !== undefined) {
+        this.joiningDate = this.datePipe.transform(new Date(this.local_data.DateOfJoining), 'yyyy-MM-dd');
+    }
+    if (this.local_data.imagePath === undefined) {
+        this.local_data.imagePath = 'assets/images/users/default.png';
+    }
+
+
+}
+
+    getData(pagprevia: number = 0, pag: number = 0, tam: number = 10): void {
+      this.detrolesservice.getDetRoles(pag, tam,'',+this.local_data.id)
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe(respuesta => {
+              //this.totalCount = parseInt(respuesta.total_count);
+              //this.paginator.length = this.totalCount;
+              this.dataSource = new MatTableDataSource(respuesta.records);
+              this.dataSource.data.forEach(row => {
+                if (row.id_opcion >0) this.selection.select(row);
+              });
+          });
+
+    }
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected(): any {
@@ -234,16 +304,16 @@ export class RolDialogContent {
     }
 
     /** The label for the checkbox on the passed row */
-    checkboxLabel(row?: PeriodicElement): string {
+    checkboxLabel(row?: DetRol): string {
         if (!row) {
             return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
         }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
     }
 
     submit(): void {
-        let seleccionado: number[] = this.selection.selected.map(item => item.position);
-        console.log(seleccionado);
+      console.log()
+
     }
 
 
@@ -255,52 +325,29 @@ export class RolDialogContent {
     joiningDate: any = '';
     roles: Rol[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    private roldetalleSubscription: Subscription = new Subscription();
 
     miFormulario: FormGroup;
 
-    ngOnInit() {
-        this.createForm();
-    }
-
-    constructor(
-        private rolValidatorService: RolValidatorService,
-        private validatorService: ValidatorService,
-
-        public datePipe: DatePipe,
-        public dialogRef: MatDialogRef<RolDialogContent>,
-        // @Optional() is used to prevent error if no data is passed
-        @Optional() @Inject(MAT_DIALOG_DATA) public data: Rol,
-        private _formBuilder: FormBuilder) {
 
 
 
-        this.miFormulario = this.createForm();
-        this.local_data = { ...data };
-        this.action = this.local_data.action;
-
-        //Actualizo el formulario                    
-        this.miFormulario.patchValue(this.local_data);
-
-        //Habilitar Formularios
-        this.doActualizarForm(this.action)
-
-        if (this.local_data.DateOfJoining !== undefined) {
-            this.joiningDate = this.datePipe.transform(new Date(this.local_data.DateOfJoining), 'yyyy-MM-dd');
-        }
-        if (this.local_data.imagePath === undefined) {
-            this.local_data.imagePath = 'assets/images/users/default.png';
-        }
-
-
-    }
 
     doAction(): void {
+      let seleccionado: number[] = this.selection.selected.map(item => item.id);
+      this.miFormulario.get('idopciones')!.setValue(seleccionado.toString());
         this.miFormulario.markAllAsTouched();
         if (!this.miFormulario.valid) {
             return;
         }
-        this.doActualizarForm();
+        //this.miFormulario.controls['descripcion'].enable();
         const rol: Rol = this.miFormulario.value;
+        //const des:string = this.miFormulario.getRawValue().nestedForm
+        //let rol: Rol = this.miFormulario.getRawValue();
+        rol.descripcion = this.miFormulario.get('descripcion')!.value;
+        rol.descripcion = "asistente ---"
+
+        this.doActualizarForm();
         this.dialogRef.close({ event: this.action, data: rol });
     }
     closeDialog(): void {
@@ -348,6 +395,7 @@ export class RolDialogContent {
         let form = this._formBuilder.group({
             id: ['', []],
             descripcion: ['', [Validators.required], [this.rolValidatorService]],
+            idopciones: ['', []],
             estado: ['', []]
         }, { updateOn: 'blur' });
         return form;

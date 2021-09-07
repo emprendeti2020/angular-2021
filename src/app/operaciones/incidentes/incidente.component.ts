@@ -31,7 +31,7 @@ export class IncidenteComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
     searchText: any;
 
-    displayedColumns: string[] = ['des_corta', 'nom_arrendatario', 'fecha', 'incidente', 'estadoincidente', 'tipoincidente', 'accion'];
+    displayedColumns: string[] = ['id','des_corta', 'nom_arrendatario', 'fecha', 'incidente', 'estadoincidente', 'tipoincidente', 'accion'];
     incidentes: Incidente[] = [];
 
     dataSource = new MatTableDataSource(this.incidentes);
@@ -171,7 +171,7 @@ export class IncidenteComponent implements OnInit, OnDestroy, AfterViewInit {
         // datos = datos.map(dato=>({nombre:dato.nombre,rut:dato.rut}))
         // o incluso
         // datos = datos.map(({ nombre, rut, ubicacion }) => ({ nombre, rut, ubicacion }))
-        //el unico pero, es que tendras que escribi  let datos: any 
+        //el unico pero, es que tendras que escribi  let datos: any
 
 
     }
@@ -296,7 +296,7 @@ export class IncidenteDialogContent {
                 this.tecnicos = respuesta.records;
             });
 
-        //   
+        //
 
         //ESTADO DEL INCIDENTE
         if (this.parametrosService.getestadoIncidente == undefined) {
@@ -309,12 +309,12 @@ export class IncidenteDialogContent {
         else {
             this.estadoIncidente = this.parametrosService.gettipoIncidente.records;
         }
-        //ESTADO DEL INCIDENTE        
+        //ESTADO DEL INCIDENTE
 
 
 
 
-        //Actualizo el formulario                    
+        //Actualizo el formulario
         this.miFormulario.patchValue(this.local_data);
 
         //Habilitar Formularios
@@ -390,10 +390,14 @@ export class IncidenteDialogContent {
         }
         else {
             //deshabilito la key si es Actualizar
+            this.miFormulario.markAllAsTouched();
             this.miFormulario.get('nom_arrendatario')!.disable();
             for (let el in this.miFormulario.controls) {
                 if (this.miFormulario.controls[el].errors) {
+                    console.log('error de formulario');
                     console.log(el)
+                    console.log('fin error de formulario');
+
                 }
             }
 
